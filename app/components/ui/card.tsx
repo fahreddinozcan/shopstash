@@ -15,6 +15,7 @@ import Image from "next/image";
 
 import { FaCartShopping } from "react-icons/fa6";
 import CartContext from "../cart/CartContext";
+import autoprefixer from "autoprefixer";
 type cardProps = {
     id: number;
     title: string;
@@ -45,8 +46,8 @@ export default function CardComponent(props: { item: cardProps }) {
                         <Image
                             src={image}
                             alt={title}
-                            width={500}
-                            height={500}
+                            width={300}
+                            height={300}
                         ></Image>
 
                         <CardDescription>{company}</CardDescription>

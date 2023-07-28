@@ -2,7 +2,7 @@ export const items = [
     {
         id: 1,
         title: "Elegant Leather Watch",
-        image: "/images/m1air.png",
+        image: "/images/1.png",
         description: "A sophisticated leather watch for all occasions.",
         company: "Timepiece Creations",
         price: 99.99,
@@ -10,7 +10,7 @@ export const items = [
     {
         id: 2,
         title: "Cozy Knit Sweater",
-        image: "/images/m1air.png",
+        image: "/images/sweater.png",
         description: "Stay warm and stylish with this soft knit sweater.",
         company: "Fashion Forward",
         price: 49.95,
@@ -18,7 +18,7 @@ export const items = [
     {
         id: 3,
         title: "Vintage Polaroid Camera",
-        image: "/images/m1air.png",
+        image: "/images/3.png",
         description: "Capture moments in retro style with this classic camera.",
         company: "Nostalgia Co.",
         price: 129.0,
@@ -26,7 +26,7 @@ export const items = [
     {
         id: 4,
         title: "Modern Bluetooth Headphones",
-        image: "/images/m1air.png",
+        image: "/images/4.png",
         description:
             "Experience high-quality sound and comfort with these headphones.",
         company: "AudioTech",
@@ -35,7 +35,7 @@ export const items = [
     {
         id: 5,
         title: "Luxury Fountain Pen",
-        image: "/images/m1air.png",
+        image: "/images/5.png",
         description: "Write with elegance using this exquisite fountain pen.",
         company: "Inkwell Designs",
         price: 149.5,
@@ -43,7 +43,7 @@ export const items = [
     {
         id: 6,
         title: "Sleek Laptop Backpack",
-        image: "/images/m1air.png",
+        image: "/images/6.png",
         description:
             "Carry your essentials in style with this modern laptop backpack.",
         company: "TechGear",
