@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { auth, UserButton } from "@clerk/nextjs";
 import Cart from "./cart/cart";
+import SignOutButton from "./signOutButton";
 
 const Header = () => {
     const { userId } = auth();
+
     console.log(userId);
 
     return (
@@ -30,8 +32,16 @@ const Header = () => {
                                 href="register"
                                 className="text-gray-300 hover:text-white mr-5"
                             >
-                                Register
+                                Send Mail
                             </Link> */}
+                            {/* <button
+                                onClick={async () => {
+                                    fetch("/api/send");
+                                }}
+                            >
+                                Send Mail
+                            </button> */}
+
                             <Link
                                 href="sign-in"
                                 className="text-gray-300 hover:text-white mr-5"
@@ -48,12 +58,15 @@ const Header = () => {
                     )}
 
                     {userId && (
-                        <Link
-                            href="profile"
-                            className="text-gray-100 hover:text-white mr-6"
-                        >
-                            Profile
-                        </Link>
+                        <>
+                            <SignOutButton />
+                            <Link
+                                href="profile"
+                                className="text-gray-100 hover:text-white mr-6"
+                            >
+                                Profile
+                            </Link>
+                        </>
                     )}
                     <div className="ml-auto">
                         <UserButton afterSignOutUrl="/" />

@@ -9,13 +9,17 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import { Rating } from "@mui/material";
+
 import { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 import { FaCartShopping } from "react-icons/fa6";
 import CartContext from "../cart/CartContext";
-import autoprefixer from "autoprefixer";
+import RateContext from "../context/RateContext";
+
+import { useState } from "react";
 type cardProps = {
     id: number;
     title: string;
@@ -27,11 +31,12 @@ type cardProps = {
 
 export default function CardComponent(props: { item: cardProps }) {
     const { item } = props;
-    const { id, title, image, description, company, price } = item;
+    const { id, title, image, company } = item;
+
+    const [value, setValue] = useState(2);
 
     const { addItem, removeItem, cartItemIds } = useContext(CartContext);
-
-    const addToCartHandler = () => {};
+    const { itemRates, rateItem } = useContext(RateContext);
 
     return (
         <>
@@ -54,12 +59,20 @@ export default function CardComponent(props: { item: cardProps }) {
                     </CardContent>
                 </Link>
                 <CardFooter>
-                    <CartButton
-                        id={id}
-                        cartItemIds={cartItemIds}
-                        addItem={addItem}
-                        removeItem={removeItem}
-                    />
+                    <div className="grid grid-rows-2">
+                        <Rating
+                            name="simple-controlled"
+                            value={parseInt(itemRates[id - 1])}
+                            readOnly
+                        />
+                        <CartButton
+                            id={id}
+                            cartItemIds={cartItemIds}
+                            addItem={addItem}
+                            removeItem={removeItem}
+                        />
+                    </div>
+
                     {/* {!cartItemIds.includes(id) ? (
                         <button
                             className="rounded-full bg-cyan-500 px-4 py-2 flex items-center justify-center gap-3"

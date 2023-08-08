@@ -17,6 +17,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import CartContext from "./CartContext";
+import RateContext from "../context/RateContext";
 
 type Item = {
     id: number;
@@ -40,7 +41,7 @@ const mapIdsToObjects = (products: Item[], ids: number[]): Item[] => {
 
 export default function Cart() {
     const { removeItem, resetCart, cart } = useContext(CartContext);
-
+    const { resetItemRates } = useContext(RateContext);
     return (
         <>
             <Sheet>
@@ -50,10 +51,14 @@ export default function Cart() {
                 <SheetContent>
                     <SheetHeader>
                         <SheetTitle>
-                            <p className="text-3xl mb-20">My Cart</p>
+                            <div>
+                                <p className="text-3xl mb-6">My Cart</p>
+                            </div>
+                
+                            
                         </SheetTitle>
                         {!cart || cart.length === 0 ? (
-                            <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
+                            <div className="mt-20 flex  flex-col items-center justify-center ">
                                 <FaCartShopping size="75" />
                                 <p className="mt-6 text-center text-2xl font-bold">
                                     Your cart is empty.
@@ -61,16 +66,12 @@ export default function Cart() {
                             </div>
                         ) : (
                             <div className="flex h-full flex-col justify-between  p-1">
-                                <button
-                                    onClick={() => {
-                                        resetCart();
-                                    }}
-                                >
-                                    RESET CART
-                                </button>
+                                
+                                
                                 <ul className="flex-grow-overflow-auto-py4">
                                     {cart.map((item) => {
                                         return (
+                                            
                                             <li
                                                 className="flex w-full flex-col border-b border-neutral-300 dark:border-neutral-700"
                                                 key={item.id}
@@ -111,27 +112,42 @@ export default function Cart() {
                                                     </Link>
                                                 </div>
                                             </li>
+                                            
+                                           
                                         );
                                     })}
                                 </ul>
+                                <div className="flex align-center justify-center mt-10" key="reset">
+                                                <button
+                                                className="rounded-full bg-black box-border w-36 h-8 mb-4 self-auto"
+                                                    onClick={() => {
+                                                        resetCart();
+                                                    }}
+                                                >
+                                                    <p className="text-white box-content">RESET CART</p>
+                                                    
+                                                </button>
+                                    </div>
                             </div>
                         )}
+                        
+                        <button
+                                onClick={() => {
+                                    resetItemRates();
+                                }}
+                            >
+                                RESET RATES
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    fetch("/api/send");
+                                }}
+                            >
+                                Send Mail
+                            </button>
                     </SheetHeader>
                 </SheetContent>
             </Sheet>
         </>
     );
 }
-
-// const CartObjects = ({
-//     cart,
-//     removeItem,
-//     addItem,
-// }: {
-//     cart: Item[];
-//     removeItem: (id: number) => Promise<void>;
-//     addItem: (id: number) => Promise<void>;
-// }) => {
-
-//     );
-// };

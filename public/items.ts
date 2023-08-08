@@ -6,6 +6,8 @@ export const items = [
         description: "A sophisticated leather watch for all occasions.",
         company: "Timepiece Creations",
         price: 99.99,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 2,
@@ -14,6 +16,8 @@ export const items = [
         description: "Stay warm and stylish with this soft knit sweater.",
         company: "Fashion Forward",
         price: 49.95,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 3,
@@ -22,6 +26,8 @@ export const items = [
         description: "Capture moments in retro style with this classic camera.",
         company: "Nostalgia Co.",
         price: 129.0,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 4,
@@ -31,6 +37,8 @@ export const items = [
             "Experience high-quality sound and comfort with these headphones.",
         company: "AudioTech",
         price: 79.99,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 5,
@@ -39,6 +47,8 @@ export const items = [
         description: "Write with elegance using this exquisite fountain pen.",
         company: "Inkwell Designs",
         price: 149.5,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 6,
@@ -48,6 +58,8 @@ export const items = [
             "Carry your essentials in style with this modern laptop backpack.",
         company: "TechGear",
         price: 69.95,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 7,
@@ -57,6 +69,8 @@ export const items = [
             "Add a touch of art to your home with this beautiful canvas painting.",
         company: "Artistic Expressions",
         price: 189.0,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 8,
@@ -66,6 +80,8 @@ export const items = [
             "Indulge in the rich flavors of these premium coffee beans.",
         company: "Bean Master",
         price: 12.99,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 9,
@@ -75,6 +91,8 @@ export const items = [
             "Keep your cards and cash organized with this timeless leather wallet.",
         company: "LeatherCraft",
         price: 45.0,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 10,
@@ -84,6 +102,8 @@ export const items = [
             "A sleek and minimalistic wristwatch that complements any outfit.",
         company: "Timeless Watches",
         price: 89.95,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 11,
@@ -93,6 +113,8 @@ export const items = [
             "Upgrade your kitchen with this high-quality chef's knife.",
         company: "Culinary Masterpieces",
         price: 149.0,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 12,
@@ -102,6 +124,8 @@ export const items = [
             "Protect your eyes in style with these fashionable sunglasses.",
         company: "Sunshine Shades",
         price: 59.99,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 13,
@@ -110,6 +134,8 @@ export const items = [
         description: "Step out in confidence with these trendy leather boots.",
         company: "Urban Chic",
         price: 129.95,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 14,
@@ -119,6 +145,8 @@ export const items = [
             "Create a soothing ambiance with this aromatherapy diffuser.",
         company: "Relaxation Station",
         price: 34.5,
+        rateValue: 0,
+        rateCount: 0,
     },
     {
         id: 15,
@@ -128,5 +156,7 @@ export const items = [
             "Enjoy your favorite music on the go with this compact speaker.",
         company: "SoundWave",
         price: 59.95,
+        rateValue: 0,
+        rateCount: 0,
     },
 ];

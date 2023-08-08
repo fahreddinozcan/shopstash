@@ -1,14 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-import { useRouter } from "next/router";
+import React, { createContext, useEffect, useState } from "react";
 
 import { items } from "@/public/items";
 
 import { Redis } from "@upstash/redis";
-
-import { currentUser } from "@clerk/nextjs";
 
 const redis = new Redis({
     url: "https://careful-ladybug-31212.upstash.io",
@@ -22,6 +18,8 @@ type Item = {
     description: string;
     company: string;
     price: number;
+    rateValue: number;
+    rateCount: number;
 };
 
 interface CartContextProps {

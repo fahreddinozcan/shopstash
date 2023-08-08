@@ -5,8 +5,10 @@ import { items } from "@/public/items";
 import { useContext } from "react";
 import Image from "next/image";
 import CartContext from "@/app/components/cart/CartContext";
+import RateContext from "@/app/components/context/RateContext";
 import CartButton from "@/app/components/cartButton";
 import Cart from "@/app/components/cart/cart";
+import { Rating } from "@mui/material";
 
 const getItem = (id: string) => {
     const item = items.find((i) => i.id === parseInt(id));
@@ -15,6 +17,7 @@ const getItem = (id: string) => {
 
 export default function Product({ params }: { params: { id: string } }) {
     const { addItem, removeItem, cartItemIds } = useContext(CartContext);
+    const { itemRates, rateItem } = useContext(RateContext);
     const item = getItem(params.id);
 
     // const { cart } = useContext(CartContext);
@@ -49,7 +52,11 @@ export default function Product({ params }: { params: { id: string } }) {
                     <p className="mb-4 font-semibold text-xl">${item.price}</p>
 
                     <p className="mb-20 text-gray-500 ">{item.description}</p>
-
+                    <RatingComponent
+                        rateValue={parseInt(itemRates[parseInt(params.id) - 1])}
+                        id={params.id}
+                        rateItem={rateItem}
+                    />
                     <div className="flex flex-wrap gap-2 mb-5">
                         <CartButton
                             id={parseInt(params.id)}
@@ -78,3 +85,29 @@ export default function Product({ params }: { params: { id: string } }) {
         </div>
     );
 }
+
+const RatingComponent = ({
+    rateValue,
+    id,
+    rateItem,
+}: // rateItem,
+{
+    rateValue: number;
+    id: string;
+    rateItem: (id: string, rate: string) => {};
+}) => {
+    return (
+        <div className="mb-3">
+            <Rating
+                name="simple-controlled"
+                value={rateValue}
+                onChange={async (event, newValue) => {
+                    if (!newValue) return;
+
+                    console.log(newValue);
+                    rateItem(id, newValue.toString());
+                }}
+            />
+        </div>
+    );
+};

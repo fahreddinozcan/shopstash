@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import CartProvider from "./components/cart/CartContext";
 import { GlobalProvider } from "./GlobalProvider";
+import { Toaster } from "@/components/ui/toaster";
 import Header from "./components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,6 +30,7 @@ export default function RootLayout({
                                 <div className="mt-5">{children}</div>
                             </div>
                         </main>
+                        <Toaster />
                     </body>
                 </html>
             </GlobalProvider>
