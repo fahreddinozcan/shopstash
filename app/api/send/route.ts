@@ -2,9 +2,9 @@ import { EmailTemplate } from "@/app/components/email-template";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend("re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY");
-
+// export const runtime = "edge";
 export async function GET() {
+    const resend = new Resend("re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY");
     try {
         const data = await resend.emails.send({
             from: "ShopStash <onboarding@resend.dev>",
@@ -14,8 +14,8 @@ export async function GET() {
             text: "selam",
         });
 
-        return NextResponse.json(data);
+        return NextResponse.json("sent!");
     } catch (error) {
-        return NextResponse.json({ error });
+        return NextResponse.json("Error!");
     }
 }
