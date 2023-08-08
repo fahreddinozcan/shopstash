@@ -1,13 +1,15 @@
 import { EmailTemplate } from "@/app/components/email-template";
+import { verifySignature } from "@upstash/qstash/nextjs";
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
+export default verifySignature(POST);
+
 const RESEND_API_KEY = "re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY";
 
-export async function POST() {
+async function POST() {
     const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -30,3 +32,9 @@ export async function POST() {
 
     return NextResponse.json("ERROR!");
 }
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
