@@ -6,7 +6,7 @@ import { Resend } from "resend";
 export async function GET() {
     const resend = new Resend("re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY");
     try {
-        const data = await resend.emails.send({
+        resend.emails.send({
             from: "ShopStash <onboarding@resend.dev>",
             to: ["fahreddin@upstash.com"],
             subject: "Come back!",
