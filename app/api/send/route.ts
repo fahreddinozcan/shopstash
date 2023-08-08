@@ -4,7 +4,6 @@ import { Resend } from "resend";
 
 const resend = new Resend("re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY");
 
-export const runtime = "edge";
 export async function GET() {
     try {
         const data = await resend.emails.send({
