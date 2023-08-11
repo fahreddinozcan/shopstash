@@ -14,7 +14,7 @@ type mailType =
   | "shipment"
   | "items-to-rate"
   | "forgot-items-in-cart";
-export default async function POST(request: Request) {
+export async function POST(request: Request) {
   const mailSubject: Record<mailType, string> = {
     "item-interest": "Item Interest",
     shipment: "Your items are shipped!",
