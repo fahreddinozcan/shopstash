@@ -6,25 +6,21 @@ import { auth, currentUser } from "@clerk/nextjs";
 export async function GlobalProvider({ children }: { children: any }) {
   const { userId } = auth();
   const user = await currentUser();
-  return (
-    <UserStateProvider
-      userId={userId}
-      user={
-        user
-          ? {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              username: user.username,
-              emailAddress: user.emailAddresses[0],
-            }
-          : {
-              firstName: "none",
-              lastName: "none",
-              username: "none",
-              emailAddress: "none",
-            }
+  const userData = user
+    ? {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        emailAddress: user.emailAddresses[0].emailAddress,
       }
-    >
+    : {
+        firstName: "none",
+        lastName: "none",
+        username: "none",
+        emailAddress: "none",
+      };
+  return (
+    <UserStateProvider userId={userId} user={userData}>
       <CartProvider userId={userId}>
         <RateProvider userId={userId}>{children}</RateProvider>
       </CartProvider>

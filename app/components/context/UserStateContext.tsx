@@ -28,6 +28,8 @@ type eventType =
   | "cart-emptied"
   | "rate"
   | "checkout";
+
+type mailType = 'item-interest' | 'shipment' | 'items-to-rate' | 'forgot-items-in-cart'
 interface UserStateContextProps {
   userState: stateType;
   triggerEvent: (event: eventType, id?: number, cart?: Item[]) => Promise<void>;
@@ -76,15 +78,25 @@ export const UserStateProvider: any = ({
         title: "Scheduled",
         description: `Item with ID: ${id} is viewed! If it doesn't get added to cart in a day, notification will be sent!`,
       });
+
+      fetch("/api/setSchedule", {
+        method: "POST",
+        body: JSON.stringify({
+          mail_type: 'item-interest',
+          delay: "10s",
+          user: {
+            userID: userId,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            emailAddress: user.emailAddress,
+          },
+        }),
+      });
     } else if (event === "add-to-cart" && id) {
       const interestedIn: number[] = await redis.smembers(
         `interested-in:${userId}`
       );
-
-      console.log(interestedIn);
-      console.log(typeof id, id);
-      console.log(typeof id.toString(), typeof interestedIn[0], id);
-      console.log(interestedIn.includes(id), id, interestedIn);
 
       if (interestedIn.includes(id)) {
         const newInterestedIn = interestedIn.filter((item) => {
@@ -105,6 +117,19 @@ export const UserStateProvider: any = ({
             title: "Removed Schedule",
             description: `Item with ID: ${id} is viewed!. Unscheduling the interest items mail.`,
           });
+          fetch("/api/setSchedule", {
+            method: "DELETE",
+            body: JSON.stringify({
+              mail_type: 'item-interest',
+              user: {
+                userID: userId,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                emailAddress: user.emailAddress,
+              },
+            }),
+          });
         }
 
         redis.srem(`interested-in:${userId}`, id.toString());
@@ -112,6 +137,19 @@ export const UserStateProvider: any = ({
       setUserState("items-in-cart");
     } else if (event === "cart-emptied") {
       setUserState("blank-cart");
+      fetch("/api/setSchedule", {
+        method: "DELETE",
+        body: JSON.stringify({
+          mail_type: 'forgot-items-in-cart',
+          user: {
+            userID: userId,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            emailAddress: user.emailAddress,
+          },
+        }),
+      });
     } else if (event === "rate" && id) {
       const itemsToBeRated = await redis.smembers(`to-be-rated:${userId}`);
 
@@ -128,6 +166,19 @@ export const UserStateProvider: any = ({
           title: "Removed Schedule",
           description: `Item with ID: ${id} is rated. There's no item-to-be-rated. Aborting the scheduled mail`,
         });
+        fetch("/api/setSchedule", {
+          method: "DELETE",
+          body: JSON.stringify({
+            mail_type: 'items-to-rate',
+            user: {
+              userID: userId,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              username: user.username,
+              emailAddress: user.emailAddress,
+            },
+          }),
+        });
       } else {
         console.log(newToBeRated);
 
@@ -140,11 +191,7 @@ export const UserStateProvider: any = ({
           )}`,
         });
       }
-
-      // console.log('Remove from to be rated!')
-      // TODO: remove the item from the to be rated items
-    } else if (event === "checkout") {
-      if (!cart) return;
+    } else if (event === "checkout" && cart) {
       const itemIDs = cart?.map((item) => item.id);
       console.log(cart);
       toast({
@@ -152,17 +199,19 @@ export const UserStateProvider: any = ({
         description:
           "A 'Your items are shipped!' mail is scheduled with a delay of 24h. ",
       });
+      console.log(user);
       fetch("/api/setSchedule", {
         method: "POST",
         body: JSON.stringify({
-          mail_type: event,
+          mail_type: 'shipment',
           items: itemIDs,
           delay: "10s",
           user: {
+            userID: userId,
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
-            emailAddress: user.EmailAddress,
+            emailAddress: user.emailAddress,
           },
         }),
       });
@@ -173,25 +222,47 @@ export const UserStateProvider: any = ({
           " "
         )} `,
       });
+      fetch("/api/setSchedule", {
+        method: "POST",
+        body: JSON.stringify({
+          mail_type: "items-to-rate",
+          items: itemIDs,
+          delay: "10s",
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            emailAddress: user.emailAddress,
+          },
+        }),
+      });
 
       redis.sadd(`to-be-rated:${userId}`, ...itemIDs);
-      // TODO: add a shipping mail to 1 day delay
-      toast({
-        title: "Scheduled",
-        description:
-          "A 'Your items are shipped!' mail is scheduled with a delay of 24h. ",
-      });
     }
 
-    if (userState === "items-in-cart") {
+    if (userState === "items-in-cart" && cart) {
       if (event === "sign-out") {
-        console.log("HEY! COME BACK!");
+        const itemIDs = cart?.map((item) => item.id);
         toast({
           title: "Scheduled",
           description:
             "A 'you forgot some items in your cart' mail is scheduled with a delay of 24h. ",
         });
-        fetch("/api/send", { method: "POST" });
+
+        fetch("/api/setSchedule", {
+          method: "POST",
+          body: JSON.stringify({
+            mail_type: 'forgot-items-in-cart',
+            items: itemIDs,
+            delay: "10s",
+            user: {
+              firstName: user.firstName,
+              lastName: user.lastName,
+              username: user.username,
+              emailAddress: user.emailAddress,
+            },
+          }),
+        });
       }
     }
   };
