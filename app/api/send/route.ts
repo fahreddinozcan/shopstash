@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       from: "ShopStash <onboarding@resend.dev>",
       to: [user.emailAddress],
       subject: mail_type,
-      react: EmailTemplate({ firstName: "Fahreddin" }),
+      react: EmailTemplate({ firstName: user.firstName }),
       text: "selam",
     }),
   });

@@ -162,7 +162,7 @@ export const UserStateProvider: any = ({
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
-            emailAddress: user.primaryEmailAddress,
+            emailAddress: user.EmailAddress,
           },
         }),
       });
