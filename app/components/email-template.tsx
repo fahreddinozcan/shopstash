@@ -36,6 +36,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             return (
               <div key="item">
                 <p>ITEMS</p>
+                {itemsData}
               </div>
             );
           }
