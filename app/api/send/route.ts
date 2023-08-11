@@ -2,8 +2,8 @@ import { EmailTemplate } from "@/app/components/email-template";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
+// export const runtime = "edge";
+// export const dynamic = "force-dynamic";
 
 const RESEND_API_KEY = "re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY";
 
