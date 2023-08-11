@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const body = await request.text();
   const { mail_type, items, user } = JSON.parse(body);
 
-  const res = await fetch("https://api.resend.com/emails", {
+  await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       from: "ShopStash <onboarding@resend.dev>",
       to: [user.emailAddress],
       subject: mailSubject[mail_type as mailType],
-      text: EmailTemplate({ user, mail_type }),
+      text: "selam",
     }),
   });
   //   const data = await resend.emails.send({
