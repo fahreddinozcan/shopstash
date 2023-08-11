@@ -50,9 +50,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
                 <div className="z-30 flex  space-x-4 align-center">
                   <div className="relative h-full w-[4.5rem] cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
                     <img
-                      className="h-full w-full object-cover "
-                      width={68}
-                      height={68}
+                      className="h-full w-full object-cover w-full h-full"
                       alt={item.title}
                       src={item.image}
                     />
