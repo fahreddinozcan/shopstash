@@ -1,5 +1,5 @@
 import * as React from "react";
-import { items as itemInfo } from "@/public/items";
+import { items } from "@/public/items";
 import Image from "next/image";
 
 type mailType =
@@ -28,7 +28,8 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           They will reach to you today.
         </p>
         {itemsData?.map((itemID) => {
-          const item = itemInfo.find((item) => {
+          const item = items.find((item) => {
+            console.log(item.id, itemID);
             item.id.toString() == itemID;
           });
           if (!item)
