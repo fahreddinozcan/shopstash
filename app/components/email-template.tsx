@@ -30,7 +30,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
         {itemsData?.map((itemID) => {
           const item = items.find((item) => {
             console.log(item.id, itemID);
-            item.id == parseInt(itemID);
+            return item.id == parseInt(itemID);
           });
           if (!item) {
             return (
