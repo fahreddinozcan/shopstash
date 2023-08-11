@@ -1,125 +1,194 @@
 "use client";
 
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 
 import { items } from "@/public/items";
 
 import { Redis } from "@upstash/redis";
+import UserStateContext from "../context/UserStateContext";
 
 const redis = new Redis({
-    url: "https://careful-ladybug-31212.upstash.io",
-    token: "AXnsACQgYjg5ZmZkYTUtZjg0OS00OTJmLTk4NGQtNWEzMDdlODdhNzg2N2VmNTNkYjkzZGUyNGU0N2FlODZmYTM0NmYwOTRkY2Y=",
+  url: "https://careful-ladybug-31212.upstash.io",
+  token:
+    "AXnsACQgYjg5ZmZkYTUtZjg0OS00OTJmLTk4NGQtNWEzMDdlODdhNzg2N2VmNTNkYjkzZGUyNGU0N2FlODZmYTM0NmYwOTRkY2Y=",
 });
 
 type Item = {
-    id: number;
-    title: string;
-    image: string;
-    description: string;
-    company: string;
-    price: number;
-    rateValue: number;
-    rateCount: number;
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  company: string;
+  price: number;
+  rateValue: number;
+  rateCount: number;
 };
 
 interface CartContextProps {
-    cartItemIds: number[];
-    cart: Item[];
-    addItem: (id: number) => Promise<void>;
-    removeItem: (id: number) => Promise<void>;
-    resetCart: () => {};
+  cart: Item[];
+  cartItems: cartContent;
+  addItem: (id: number) => Promise<void>;
+  checkout: () => Promise<void>;
+  removeItem: (id: number) => Promise<void>;
+  resetCart: () => {};
 }
 
+type cartContent = {
+  [key: string]: number;
+};
+
 const CartContext = createContext<CartContextProps>({
-    cartItemIds: [],
-    cart: [],
-    addItem: async (id: number) => {},
-    removeItem: async (id: number) => {},
-    resetCart: async () => {},
+  cart: [],
+  cartItems: {},
+  addItem: async (id: number) => {},
+  checkout: async () => {},
+  removeItem: async (id: number) => {},
+  resetCart: async () => {},
 });
 
-const mapIdsToObjects = (products: Item[], ids: string[]): Item[] => {
-    const mappedItems: Item[] = [];
-    for (const id of ids) {
-        const product = products.find((p) => p.id === parseInt(id));
-        if (product) {
-            mappedItems.push(product);
-        }
+const mapIdsToObjects = (
+  products: Item[],
+  ids: string[],
+  cartItems: cartContent
+): Item[] => {
+  const mappedItems: Item[] = [];
+  for (const id of ids) {
+    const product = products.find((p) => p.id === parseInt(id));
+    if (product && cartItems?.hasOwnProperty(id)) {
+      mappedItems.push(product);
     }
+  }
 
-    console.log("CART:");
-    console.log(mappedItems);
-    return mappedItems;
+  return mappedItems;
 };
 
 export const CartProvider: any = ({
-    children,
-    userId,
+  children,
+  userId,
 }: {
-    children: any;
-    userId: string;
+  children: any;
+  userId: string;
 }) => {
-    const [cartItemIds, setCartItemIds] = useState<number[]>([]);
-    let itemCount = 0;
-    const [cart, setCart] = useState<Item[]>([]);
-    // const [userId, setUserId] = useState("0");
+  let itemCount = 0;
+  const [cart, setCart] = useState<Item[]>([]);
+  const [cartItems, setCartItems] = useState<cartContent>({});
 
-    useEffect(() => {
-        fetchCartItems();
-    }, [itemCount]);
+  const { userState, triggerEvent } = useContext(UserStateContext);
 
-    const fetchCartItems = async () => {
-        const itemIDs = await redis.smembers(`usercart:${userId}`);
-        // console.log(itemIDs);
-        setCart(mapIdsToObjects(items, itemIDs));
-        setCartItemIds(itemIDs.map((id) => parseInt(id)));
+  useEffect(() => {
+    fetchCartItems();
+  }, [itemCount]);
 
-        // console.log(itemIDs);
-    };
+  const fetchCartItems = async () => {
+    const itemIDs = await redis.smembers(`usercart:${userId}`);
+    const flatitems = await redis.hgetall(`user:${userId}`);
 
-    const addItem = async (id: number) => {
-        console.log("ADD");
-        const item = items.find((i) => i.id === id);
+    setCartItems(flatitems as cartContent);
+    setCart(mapIdsToObjects(items, itemIDs, flatitems as cartContent));
+  };
 
-        if (!item || cartItemIds.includes(id)) return;
+  const addItem = async (id: number) => {
+    const item = items.find((i) => i.id === id);
 
-        const doesItemExist = cart?.find((i) => {
-            item.id === i.id;
-        });
-        let newCartItems;
+    if (!item) return;
 
-        if (!doesItemExist) {
-            newCartItems = [...(cart || []), item];
-            await redis.sadd(`usercart:${userId}`, id.toString());
-            fetchCartItems();
-        }
-    };
+    const doesItemExist = cart.some((i) => {
+      return id === i.id;
+    });
 
-    const removeItem = async (id: number) => {
-        console.log("REMOVE");
-        redis.srem(`usercart:${userId}`, id);
-        fetchCartItems();
-    };
+    let newCart: Item[];
 
-    const resetCart = async () => {
-        redis.del(`usercart:${userId}`);
+    if (!doesItemExist) {
+      //   console.log("ADDING THE ITEM");
+      item.quantity = 1;
+      newCart = [...(cart || []), item];
 
-        fetchCartItems();
-    };
+      redis.hincrby(`user:${userId}`, id.toString(), 1);
+      redis.sadd(`usercart:${userId}`, id.toString());
 
-    return (
-        <CartContext.Provider
-            value={{
-                addItem,
-                removeItem,
-                cartItemIds,
-                resetCart,
-                cart,
-            }}
-        >
-            {children}
-        </CartContext.Provider>
-    );
+      const newCartItems = { ...cartItems, [id]: 1 };
+
+      setCartItems(newCartItems);
+      setCart(newCart);
+      triggerEvent("add-to-cart");
+    } else {
+      const item = items.find((i) => i.id === id);
+
+      const updatedItemQuantities = {
+        ...cartItems,
+        [id]: cartItems[id] + 1,
+      };
+
+      setCartItems(updatedItemQuantities);
+
+      redis.hincrby(`user:${userId}`, id.toString(), 1);
+    }
+  };
+
+  const removeItem = async (id: number, force: boolean = false) => {
+    const doesItemExist = cart.some((i) => {
+      return id === i.id;
+    });
+
+    if (!doesItemExist) return;
+
+    if (cartItems[id] === 1 || force) {
+      const newCart: Item[] = cart.filter((item: { id: number }) => {
+        return item.id !== id;
+      });
+
+      const newCartItems = { ...cartItems };
+      delete newCartItems[id];
+      redis.hdel(`user:${userId}`, id.toString());
+
+      setCart(newCart);
+      setCartItems(newCartItems);
+      console.log(Object.keys(newCartItems).length);
+      if (Object.keys(newCartItems).length === 0) {
+        triggerEvent("cart-emptied");
+      } else {
+        triggerEvent("remove-from-cart");
+      }
+    } else if (cartItems[id] > 1) {
+      const updatedItemQuantities = {
+        ...cartItems,
+        [id]: cartItems[id] - 1,
+      };
+
+      setCartItems(updatedItemQuantities);
+
+      redis.hincrby(`user:${userId}`, id.toString(), -1);
+    }
+  };
+
+  const resetCart = async () => {
+    redis.del(`user:${userId}`);
+
+    setCart([]);
+    setCartItems({});
+  };
+
+  const checkout = async () => {
+    if (Object.keys(cartItems).length > 0) {
+      triggerEvent("checkout",undefined, cart);
+    }
+    resetCart();
+  };
+
+  return (
+    <CartContext.Provider
+      value={{
+        addItem,
+        removeItem,
+        cartItems,
+        checkout,
+        resetCart,
+        cart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export default CartContext;

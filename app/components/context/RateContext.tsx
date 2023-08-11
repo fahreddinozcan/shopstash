@@ -1,98 +1,97 @@
 "use client";
 
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
 import { useToast } from "@/components/ui/use-toast";
+import UserStateContext from "./UserStateContext";
 
 const redis = new Redis({
-    url: "https://careful-ladybug-31212.upstash.io",
-    token: "AXnsACQgYjg5ZmZkYTUtZjg0OS00OTJmLTk4NGQtNWEzMDdlODdhNzg2N2VmNTNkYjkzZGUyNGU0N2FlODZmYTM0NmYwOTRkY2Y=",
+  url: "https://careful-ladybug-31212.upstash.io",
+  token:
+    "AXnsACQgYjg5ZmZkYTUtZjg0OS00OTJmLTk4NGQtNWEzMDdlODdhNzg2N2VmNTNkYjkzZGUyNGU0N2FlODZmYTM0NmYwOTRkY2Y=",
 });
 
 const ratelimit = new Ratelimit({
-    redis: redis,
-    limiter: Ratelimit.slidingWindow(3, "10 s"),
-    analytics: true,
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(3, "10 s"),
+  analytics: true,
 });
 
-type ItemRate = {
-    id: number;
-    rate: number;
-};
-
 interface RateContextProps {
-    itemRates: string[];
-    rateItem: (id: string, rate: string) => Promise<void>;
-    resetItemRates: () => Promise<void>;
+  itemRates: string[];
+  rateItem: (id: string, rate: string) => Promise<void>;
+  resetItemRates: () => Promise<void>;
 }
 const RateContext = createContext<RateContextProps>({
-    itemRates: [],
-    rateItem: async (id: string, rate: string) => {},
-    resetItemRates: async () => {},
+  itemRates: [],
+  rateItem: async (id: string, rate: string) => {},
+  resetItemRates: async () => {},
 });
 
 export const RateProvider: any = ({
-    children,
-    userId,
+  children,
+  userId,
 }: {
-    children: any;
-    userId: string;
+  children: any;
+  userId: string;
 }) => {
-    let itemCount = 0;
+  let itemCount = 0;
 
-    const [itemRates, setItemRates] = useState<string[]>([]);
+  const [itemRates, setItemRates] = useState<string[]>([]);
+  const { triggerEvent } = useContext(UserStateContext);
 
-    const identifier = userId;
+  const identifier = userId;
 
-    const { toast } = useToast();
+  const { toast } = useToast();
 
-    useEffect(() => {
-        fetchItemRates();
-    }, [itemCount]);
+  useEffect(() => {
+    fetchItemRates();
+  }, [itemCount]);
 
-    const fetchItemRates = async () => {
-        const itemRateData = await redis.lrange("item_rates", 0, -1);
-        console.log(itemRateData);
-        setItemRates(itemRateData);
-    };
+  const fetchItemRates = async () => {
+    const itemRateData = await redis.lrange("item_rates", 0, -1);
 
-    const resetItemRates = async () => {
-        redis.del("item_rates");
-        redis.lpush("item_rates", 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);
+    setItemRates(itemRateData);
+  };
 
-        fetchItemRates();
-    };
+  const resetItemRates = async () => {
+    redis.del("item_rates");
+    redis.lpush("item_rates", 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);
 
-    const rateItem = async (id: string, rate: string) => {
-        const { success } = await ratelimit.limit(identifier);
+    fetchItemRates();
+  };
 
-        if (!success) {
-            toast({
-                title: "Ratelimited!",
-                description:
-                    "You've reached the limit for rating an item. Please try again later!",
-                variant: "destructive",
-            });
+  const rateItem = async (id: string, rate: string) => {
+    const { success } = await ratelimit.limit(identifier);
 
-            return;
-        }
-        await redis.lset("item_rates", parseInt(id) - 1, rate);
+    if (!success) {
+      toast({
+        title: "Ratelimited!",
+        description:
+          "You've reached the limit for rating an item. Please try again later!",
+        variant: "destructive",
+      });
 
-        fetchItemRates();
-    };
+      return;
+    }
+    await redis.lset("item_rates", parseInt(id) - 1, rate);
+    triggerEvent("rate", parseInt(id));
 
-    return (
-        <RateContext.Provider
-            value={{
-                itemRates,
-                rateItem,
-                resetItemRates,
-            }}
-        >
-            {children}
-        </RateContext.Provider>
-    );
+    fetchItemRates();
+  };
+
+  return (
+    <RateContext.Provider
+      value={{
+        itemRates,
+        rateItem,
+        resetItemRates,
+      }}
+    >
+      {children}
+    </RateContext.Provider>
+  );
 };
 
 export default RateContext;

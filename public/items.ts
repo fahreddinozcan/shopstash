@@ -8,6 +8,7 @@ export const items = [
         price: 99.99,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 2,
@@ -18,6 +19,7 @@ export const items = [
         price: 49.95,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 3,
@@ -28,6 +30,7 @@ export const items = [
         price: 129.0,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 4,
@@ -39,6 +42,7 @@ export const items = [
         price: 79.99,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 5,
@@ -49,6 +53,7 @@ export const items = [
         price: 149.5,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 6,
@@ -60,6 +65,7 @@ export const items = [
         price: 69.95,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 7,
@@ -71,6 +77,7 @@ export const items = [
         price: 189.0,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 8,
@@ -82,6 +89,7 @@ export const items = [
         price: 12.99,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 9,
@@ -93,6 +101,7 @@ export const items = [
         price: 45.0,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 10,
@@ -104,6 +113,7 @@ export const items = [
         price: 89.95,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 11,
@@ -115,6 +125,7 @@ export const items = [
         price: 149.0,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 12,
@@ -126,6 +137,7 @@ export const items = [
         price: 59.99,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 13,
@@ -136,6 +148,7 @@ export const items = [
         price: 129.95,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 14,
@@ -147,6 +160,7 @@ export const items = [
         price: 34.5,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
     {
         id: 15,
@@ -158,5 +172,6 @@ export const items = [
         price: 59.95,
         rateValue: 0,
         rateCount: 0,
+        quantity: 0,
     },
 ];
