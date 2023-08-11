@@ -208,7 +208,9 @@ export const UserStateProvider: any = ({
         method: "POST",
         body: JSON.stringify({
           mail_type: "shipment",
-          items: itemIDs,
+          items: itemIDs.map((item) => {
+            return item.toString();
+          }),
           delay: "10s",
           user: {
             userID: userId,

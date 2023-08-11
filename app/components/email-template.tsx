@@ -32,12 +32,13 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             console.log(item.id, itemID);
             item.id.toString() == itemID;
           });
-          if (!item)
+          if (!item) {
             return (
-              <div>
+              <div key="item">
                 <p>ITEMS</p>
               </div>
             );
+          }
 
           return (
             <li
