@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       from: "ShopStash <onboarding@resend.dev>",
       to: [user.emailAddress],
       subject: mailSubject[mail_type as mailType],
-      text: "selam",
+      react: EmailTemplate({ user, mail_type }),
     }),
   });
   //   const data = await resend.emails.send({
