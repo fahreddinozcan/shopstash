@@ -41,7 +41,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             );
           }
 
-          return <p key={item.id}>item.title</p>;
+          return <p key={item.id}>{item.title}</p>;
         })}
       </div>
     );
