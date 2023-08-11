@@ -29,7 +29,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
         </p>
         {itemsData?.map((itemID) => {
           const item = itemInfo.find((item) => {
-            item.id.toString() === itemID;
+            item.id.toString() == itemID;
           });
           if (!item)
             return (
