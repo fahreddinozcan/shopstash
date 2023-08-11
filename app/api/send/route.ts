@@ -1,9 +1,16 @@
 import { EmailTemplate } from "@/app/components/email-template";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { Redis } from "@upstash/redis";
 
 // export const runtime = "edge";
 // export const dynamic = "force-dynamic";
+
+const redis = new Redis({
+  url: "https://careful-ladybug-31212.upstash.io",
+  token:
+    "AXnsACQgYjg5ZmZkYTUtZjg0OS00OTJmLTk4NGQtNWEzMDdlODdhNzg2N2VmNTNkYjkzZGUyNGU0N2FlODZmYTM0NmYwOTRkY2Y=",
+});
 
 const RESEND_API_KEY = "re_8VuzdNyz_Ncja9WYPJNjEXdiWrY1mNoDY";
 
@@ -24,6 +31,13 @@ export async function POST(request: Request) {
   const body = await request.text();
   const { mail_type, items, user } = JSON.parse(body);
 
+  let itemsData;
+  if (mail_type === "shipment") {
+    itemsData = items;
+  } else {
+    itemsData = redis.smembers(`${mail_type}:${user.userID}`);
+  }
+
   //   await fetch("https://api.resend.com/emails", {
   //     method: "POST",
   //     headers: {
@@ -38,10 +52,10 @@ export async function POST(request: Request) {
   //     }),
   //   });
   const data = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "ShopStash <onboarding@resend.dev>",
     to: [user.emailAddress],
     subject: mailSubject[mail_type as mailType],
-    react: EmailTemplate({ user, mail_type }),
+    react: EmailTemplate({ user, mail_type, itemsData }),
     text: "text",
   });
 

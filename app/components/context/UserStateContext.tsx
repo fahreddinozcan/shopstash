@@ -29,7 +29,11 @@ type eventType =
   | "rate"
   | "checkout";
 
-type mailType = 'item-interest' | 'shipment' | 'items-to-rate' | 'forgot-items-in-cart'
+type mailType =
+  | "item-interest"
+  | "shipment"
+  | "items-to-rate"
+  | "forgot-items-in-cart";
 interface UserStateContextProps {
   userState: stateType;
   triggerEvent: (event: eventType, id?: number, cart?: Item[]) => Promise<void>;
@@ -72,7 +76,7 @@ export const UserStateProvider: any = ({
   const triggerEvent = async (event: eventType, id?: number, cart?: Item[]) => {
     console.log(`EVENT: ${event}`);
     if (event === "view-item" && id) {
-      redis.sadd(`interested-in:${userId}`, id);
+      redis.sadd(`item-interest:${userId}`, id);
 
       toast({
         title: "Scheduled",
@@ -82,7 +86,7 @@ export const UserStateProvider: any = ({
       fetch("/api/setSchedule", {
         method: "POST",
         body: JSON.stringify({
-          mail_type: 'item-interest',
+          mail_type: "item-interest",
           delay: "10s",
           user: {
             userID: userId,
@@ -95,7 +99,7 @@ export const UserStateProvider: any = ({
       });
     } else if (event === "add-to-cart" && id) {
       const interestedIn: number[] = await redis.smembers(
-        `interested-in:${userId}`
+        `item-interest:${userId}`
       );
 
       if (interestedIn.includes(id)) {
@@ -120,7 +124,7 @@ export const UserStateProvider: any = ({
           fetch("/api/setSchedule", {
             method: "DELETE",
             body: JSON.stringify({
-              mail_type: 'item-interest',
+              mail_type: "item-interest",
               user: {
                 userID: userId,
                 firstName: user.firstName,
@@ -132,7 +136,7 @@ export const UserStateProvider: any = ({
           });
         }
 
-        redis.srem(`interested-in:${userId}`, id.toString());
+        redis.srem(`item-interest:${userId}`, id.toString());
       }
       setUserState("items-in-cart");
     } else if (event === "cart-emptied") {
@@ -140,7 +144,7 @@ export const UserStateProvider: any = ({
       fetch("/api/setSchedule", {
         method: "DELETE",
         body: JSON.stringify({
-          mail_type: 'forgot-items-in-cart',
+          mail_type: "forgot-items-in-cart",
           user: {
             userID: userId,
             firstName: user.firstName,
@@ -151,7 +155,7 @@ export const UserStateProvider: any = ({
         }),
       });
     } else if (event === "rate" && id) {
-      const itemsToBeRated = await redis.smembers(`to-be-rated:${userId}`);
+      const itemsToBeRated = await redis.smembers(`items-to-rate:${userId}`);
 
       if (!itemsToBeRated) return;
 
@@ -169,7 +173,7 @@ export const UserStateProvider: any = ({
         fetch("/api/setSchedule", {
           method: "DELETE",
           body: JSON.stringify({
-            mail_type: 'items-to-rate',
+            mail_type: "items-to-rate",
             user: {
               userID: userId,
               firstName: user.firstName,
@@ -182,7 +186,7 @@ export const UserStateProvider: any = ({
       } else {
         console.log(newToBeRated);
 
-        redis.srem(`to-be-rated:${userId}`, id);
+        redis.srem(`items-to-rate:${userId}`, id);
 
         toast({
           title: "Scheduled",
@@ -203,7 +207,7 @@ export const UserStateProvider: any = ({
       fetch("/api/setSchedule", {
         method: "POST",
         body: JSON.stringify({
-          mail_type: 'shipment',
+          mail_type: "shipment",
           items: itemIDs,
           delay: "10s",
           user: {
@@ -237,7 +241,7 @@ export const UserStateProvider: any = ({
         }),
       });
 
-      redis.sadd(`to-be-rated:${userId}`, ...itemIDs);
+      redis.sadd(`items-to-rate:${userId}`, ...itemIDs);
     }
 
     if (userState === "items-in-cart" && cart) {
@@ -252,7 +256,7 @@ export const UserStateProvider: any = ({
         fetch("/api/setSchedule", {
           method: "POST",
           body: JSON.stringify({
-            mail_type: 'forgot-items-in-cart',
+            mail_type: "forgot-items-in-cart",
             items: itemIDs,
             delay: "10s",
             user: {
