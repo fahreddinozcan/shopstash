@@ -61,6 +61,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             ))}
           </tbody>
         </table>
+        <Img src={`../public/images/1.png`} alt={"selam"} width="100" />
         <p>
           Thank you for choosing us! If you have any questions or concerns,
           please contact our support team.
