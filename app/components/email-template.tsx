@@ -20,58 +20,60 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   itemsData,
 }) => {
   if (mail_type == "shipment") {
+    //
     return (
-      <div>
-        <h2>Hey, {user.firstName}!</h2>
+      <div className="container">
+        <h1>Shipping Notification</h1>
+        <p>Your order has been shipped and will be arriving soon!</p>
+        <h2>Order Details</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={index}>
+                <td>{item.title}</td>
+                <td>${item.price}</td>
+                <td>
+                  <img src={item.image} alt={item.title} width="100" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <p>
-          We just wanted to let you know that we have shipped your items below.
-          They will reach to you today.
+          Thank you for choosing us! If you have any questions or concerns,
+          please contact our support team.
         </p>
-        {itemsData?.map((itemID) => {
-          const item = items.find((item) => {
-            console.log(item.id, itemID);
-            return item.id == parseInt(itemID);
-          });
-          if (!item) {
-            return (
-              <div key="item">
-                <p>ITEMS</p>
-                {itemsData}
-              </div>
-            );
-          }
-
-          return (
-            <li
-              className="gap-3 w-[95%]  border-b border-neutral-300 dark:border-neutral-700 py-4 px-2 grid grid-flow-col grid-cols-min transition-all ease-in-out"
-              key={item.id}
-            >
-              <div>
-                <div className="z-30 flex  space-x-4 align-center">
-                  <div className="relative h-full w-[4.5rem] cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                    <img
-                      className="h-full w-full object-cover w-full h-full"
-                      alt={item.title}
-                      src={item.image}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className=" flex  flex-col text-base">
-                <span className="leading-tight">{item.title}</span>
-              </div>
-              <div className="grid grid-flow-row grid-rows-1">
-                <div className="flex  justify-end space-y-2 text-right text-m font-bold">
-                  ${item.price}
-                </div>
-              </div>
-            </li>
-          );
-        })}
       </div>
     );
   } else if (mail_type == "item-interest") {
+    // return (
+    //   <div>
+    //     <h2>Hey, {user.firstName}!</h2>
+    //     <p>Check out these items, you may be interested in them:</p>
+    //     {itemsData?.map((itemID) => {
+    //       const item = items.find((item) => {
+    //         console.log(item.id, itemID);
+    //         return item.id == parseInt(itemID);
+    //       });
+    //       if (!item) {
+    //         return (
+    //           <div key="item">
+    //             <p>ITEMS</p>
+    //             {itemsData}
+    //           </div>
+    //         );
+    //       }
+    //       return <p key={item.id}>{item.title}</p>;
+    //     })}
+    //   </div>
+    // );
   } else if (mail_type == "items-to-rate") {
   } else if (mail_type == "forgot-items-in-cart") {
   }
