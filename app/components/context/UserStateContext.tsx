@@ -211,7 +211,7 @@ export const UserStateProvider: any = ({
           items: itemIDs.map((item) => {
             return item.toString();
           }),
-          delay: "10s",
+          delay: "1s",
           user: {
             userID: userId,
             firstName: user.firstName,
