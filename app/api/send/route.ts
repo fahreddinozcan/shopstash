@@ -2,6 +2,7 @@ import { EmailTemplate } from "@/app/components/email-template";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { Redis } from "@upstash/redis";
+import { items as ItemOrigins } from "@/public/items";
 
 // export const runtime = "edge";
 // export const dynamic = "force-dynamic";
@@ -33,7 +34,9 @@ export async function POST(request: Request) {
 
   let itemsData;
   if (mail_type === "shipment") {
-    itemsData = items;
+    itemsData = items.map((itemID: string) => {
+      return ItemOrigins.find((i) => i.id.toString() == itemID);
+    });
   } else {
     itemsData = redis.smembers(`${mail_type}:${user.userID}`);
   }
