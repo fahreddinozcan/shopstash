@@ -50,7 +50,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
               <tr key={index}>
                 <td>
                   <Img
-                    src={`../public${item.image}`}
+                    src={`../public/images/1.png`}
                     alt={item.title}
                     width="100"
                   />
