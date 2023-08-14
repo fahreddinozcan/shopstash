@@ -1,6 +1,7 @@
 import * as React from "react";
 import { items } from "@/public/items";
 import Image from "next/image";
+import { Img } from "@react-email/img";
 
 type mailType =
   | "item-interest"
@@ -48,7 +49,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             {itemsData.map((item, index) => (
               <tr key={index}>
                 <td>
-                  <img src={item.image} alt={item.title} width="100" />
+                  <Img src={item.image} alt={item.title} width="100" />
                 </td>
                 <td>{item.title}</td>
                 <td>${item.price}</td>
