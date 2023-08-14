@@ -2,7 +2,7 @@ import { EmailTemplate } from "@/app/components/email-template";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { Redis } from "@upstash/redis";
-import { items as ItemOrigins } from "@/public/items";
+import { items } from "@/public/items";
 
 // export const runtime = "edge";
 // export const dynamic = "force-dynamic";
@@ -30,12 +30,12 @@ export async function POST(request: Request) {
     "items-to-rate": "Would you like to rate your purchase?",
   };
   const body = await request.text();
-  const { mail_type, items, user } = JSON.parse(body);
+  const { mail_type, itemIDs, user } = JSON.parse(body);
 
   let itemsData;
   if (mail_type === "shipment") {
-    itemsData = items.map((itemID: string) => {
-      return ItemOrigins.find((i) => i.id.toString() == itemID);
+    itemsData = itemIDs.map((itemID: string) => {
+      return items.find((i) => i.id.toString() == itemID);
     });
   } else {
     itemsData = redis.smembers(`${mail_type}:${user.userID}`);

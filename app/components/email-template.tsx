@@ -11,15 +11,25 @@ type mailType =
 interface EmailTemplateProps {
   user: any;
   mail_type: mailType;
-  itemsData?: string[];
+  itemsData?: Item[];
 }
+type Item = {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  company: string;
+  price: number;
+  rateValue: number;
+  rateCount: number;
+};
 
 export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   user,
   mail_type,
   itemsData,
 }) => {
-  if (mail_type == "shipment") {
+  if (mail_type == "shipment" && itemsData) {
     //
     return (
       <div className="container">
@@ -35,13 +45,13 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {itemsData.map((item, index) => (
               <tr key={index}>
-                <td>{item.title}</td>
-                <td>${item.price}</td>
                 <td>
                   <img src={item.image} alt={item.title} width="100" />
                 </td>
+                <td>{item.title}</td>
+                <td>${item.price}</td>
               </tr>
             ))}
           </tbody>

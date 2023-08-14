@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       mail_type,
-      items,
+      itemIDs: items,
       user,
     }),
   });
