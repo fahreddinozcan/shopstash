@@ -111,7 +111,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           It looks like you have logged out with some items still in your cart.
           Do not miss out on them!
         </p>
-        <a href="https://shopshash.vercel.app">View My Cart</a>
+        <a href="https://shopstash.vercel.app">View My Cart</a>
         <p>
           If you have any questions or need assistance, please feel free to
           reach out to us.

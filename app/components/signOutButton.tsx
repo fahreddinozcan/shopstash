@@ -6,7 +6,7 @@ import CartContext from "./context/CartContext";
 import UserStateContext from "./context/UserStateContext";
 
 export default function SignOutButton() {
-  // const { cartItems } = useContext(CartContext);
+  const { cart } = useContext(CartContext);
   const { triggerEvent } = useContext(UserStateContext);
 
   const { signOut } = useClerk();
@@ -15,8 +15,8 @@ export default function SignOutButton() {
     <>
       <button
         onClick={() => {
-          triggerEvent("sign-out");
           signOut();
+          triggerEvent("sign-out", undefined, cart);
         }}
         className="mr-5"
       >

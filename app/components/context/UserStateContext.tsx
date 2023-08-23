@@ -255,30 +255,29 @@ export const UserStateProvider: any = ({
       redis.sadd(`items-to-rate:${userId}`, ...itemIDs);
     }
 
-    if (userState === "items-in-cart" && cart) {
-      if (event === "sign-out") {
-        const itemIDs = cart?.map((item) => item.id);
-        toast({
-          title: "Scheduled",
-          description:
-            "A 'you forgot some items in your cart' mail is scheduled with a delay of 24h. ",
-        });
+    if (event === "sign-out" && cart) {
+      console.log("SIGNED OUT");
+      const itemIDs = cart?.map((item) => item.id);
+      toast({
+        title: "Scheduled",
+        description:
+          "A 'you forgot some items in your cart' mail is scheduled with a delay of 24h. ",
+      });
 
-        fetch("/api/setSchedule", {
-          method: "POST",
-          body: JSON.stringify({
-            mail_type: "forgot-items-in-cart",
-            items: itemIDs,
-            delay: "1s",
-            user: {
-              firstName: user.firstName,
-              lastName: user.lastName,
-              username: user.username,
-              emailAddress: user.emailAddress,
-            },
-          }),
-        });
-      }
+      fetch("/api/setSchedule", {
+        method: "POST",
+        body: JSON.stringify({
+          mail_type: "forgot-items-in-cart",
+          items: itemIDs,
+          delay: "1s",
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            emailAddress: user.emailAddress,
+          },
+        }),
+      });
     }
   };
 
