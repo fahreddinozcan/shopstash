@@ -242,7 +242,7 @@ export const UserStateProvider: any = ({
         body: JSON.stringify({
           mail_type: "items-to-rate",
           items: itemIDs,
-          delay: "10s",
+          delay: "1s",
           user: {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -269,7 +269,7 @@ export const UserStateProvider: any = ({
           body: JSON.stringify({
             mail_type: "forgot-items-in-cart",
             items: itemIDs,
-            delay: "10s",
+            delay: "1s",
             user: {
               firstName: user.firstName,
               lastName: user.lastName,

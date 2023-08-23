@@ -40,6 +40,7 @@ export async function POST(request: Request) {
   } else {
     itemsData = redis.smembers(`${mail_type}:${user.userID}`);
   }
+  redis.del(`${mail_type}:${user.userID}`);
 
   const data = await resend.emails.send({
     from: "ShopStash <onboarding@resend.dev>",

@@ -13,6 +13,8 @@ const redis = new Redis({
 export async function POST(request: Request) {
   const body = await request.text();
   const { mail_type, delay, user, items } = JSON.parse(body);
+  const mailID = await redis.get(`${mail_type}:${user.ID}`);
+  if (mailID) return;
 
   const APP_URL = "https://shopstash.vercel.app/api/send";
   const QSTASH_TOKEN =
