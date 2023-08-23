@@ -2,7 +2,7 @@
 
 import { useClerk } from "@clerk/nextjs";
 import { useContext } from "react";
-import CartContext from "./cart/CartContext";
+import CartContext from "./context/CartContext";
 import UserStateContext from "./context/UserStateContext";
 
 export default function SignOutButton() {
@@ -15,9 +15,6 @@ export default function SignOutButton() {
     <>
       <button
         onClick={() => {
-          // if (cartItems?.length > 1) {
-          //   fetch("/api/send");
-          // }
           triggerEvent("sign-out");
           signOut();
         }}

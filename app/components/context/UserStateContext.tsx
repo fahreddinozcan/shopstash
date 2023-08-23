@@ -2,7 +2,7 @@
 
 import { createContext, useEffect, useState, useContext } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import CartContext from "../cart/CartContext";
+import CartContext from "./CartContext";
 
 import { Redis } from "@upstash/redis";
 
@@ -34,9 +34,12 @@ type mailType =
   | "shipment"
   | "items-to-rate"
   | "forgot-items-in-cart";
+
 interface UserStateContextProps {
   userState: stateType;
   triggerEvent: (event: eventType, id?: number, cart?: Item[]) => Promise<void>;
+  recieveEmails: boolean;
+  setRecieveEmails: (recieveEmails: boolean) => void;
 }
 
 type Item = {
@@ -53,6 +56,8 @@ type Item = {
 const UserStateContext = createContext<UserStateContextProps>({
   userState: "none",
   triggerEvent: async (event, id, cart) => {},
+  recieveEmails: false,
+  setRecieveEmails: (recieveEmails: boolean) => {},
 });
 
 export const UserStateProvider: any = ({
@@ -70,10 +75,13 @@ export const UserStateProvider: any = ({
   }, [itemCount]);
 
   const [userState, setUserState] = useState<stateType>("none");
+  const [recieveEmails, setRecieveEmails] = useState<boolean>(false);
   const { cart, cartItems } = useContext(CartContext);
   const { toast } = useToast();
 
   const triggerEvent = async (event: eventType, id?: number, cart?: Item[]) => {
+    if (!recieveEmails) return;
+
     console.log(`EVENT: ${event}`);
     if (event === "view-item" && id) {
       redis.sadd(`item-interest:${userId}`, id);
@@ -111,7 +119,7 @@ export const UserStateProvider: any = ({
         if (newInterestedIn.length !== 0) {
           toast({
             title: "Edited Schedule",
-            description: `Item with ID: ${id} is viewed!. Here's the items that user is interested in but haven't added to cart: ${newInterestedIn.join(
+            description: `Item with ID ${id} is added to cart!. Here's the items that user is interested in but haven't added to cart: ${newInterestedIn.join(
               ""
             )}`,
           });
@@ -119,7 +127,7 @@ export const UserStateProvider: any = ({
           console.log("HERE");
           toast({
             title: "Removed Schedule",
-            description: `Item with ID: ${id} is viewed!. Unscheduling the interest items mail.`,
+            description: `Item with ID: ${id} is added to cart!. Unscheduling the interest items mail.`,
           });
           fetch("/api/setSchedule", {
             method: "DELETE",
@@ -203,7 +211,7 @@ export const UserStateProvider: any = ({
         description:
           "A 'Your items are shipped!' mail is scheduled with a delay of 24h. ",
       });
-      console.log(user);
+
       fetch("/api/setSchedule", {
         method: "POST",
         body: JSON.stringify({
@@ -225,7 +233,7 @@ export const UserStateProvider: any = ({
       toast({
         title: "Scheduled",
         description: `A 'You forgot to rate items!' mail is scheduled with a delay of 24h. The items are: ${itemIDs.join(
-          " "
+          ", "
         )} `,
       });
       fetch("/api/setSchedule", {
@@ -274,7 +282,9 @@ export const UserStateProvider: any = ({
   };
 
   return (
-    <UserStateContext.Provider value={{ userState, triggerEvent }}>
+    <UserStateContext.Provider
+      value={{ userState, triggerEvent, recieveEmails, setRecieveEmails }}
+    >
       {children}
     </UserStateContext.Provider>
   );

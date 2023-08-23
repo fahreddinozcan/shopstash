@@ -1,15 +1,10 @@
-import {SignIn, useSignIn} from '@clerk/nextjs'
+import { SignIn } from "@clerk/nextjs";
 
-
-const SignInPage = ()=>{
-
-
-    
-    return (
+const SignInPage = () => {
+  return (
     <>
-    <SignIn/>
+      <SignIn />
     </>
-    );
+  );
 };
-
 export default SignInPage;

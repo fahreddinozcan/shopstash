@@ -5,7 +5,7 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 import { items } from "@/public/items";
 
 import { Redis } from "@upstash/redis";
-import UserStateContext from "../context/UserStateContext";
+import UserStateContext from "./UserStateContext";
 
 const redis = new Redis({
   url: "https://careful-ladybug-31212.upstash.io",
@@ -99,10 +99,8 @@ export const CartProvider: any = ({
     let newCart: Item[];
 
     if (!doesItemExist) {
-      //   console.log("ADDING THE ITEM");
       item.quantity = 1;
       newCart = [...(cart || []), item];
-
       redis.hincrby(`user:${userId}`, id.toString(), 1);
       redis.sadd(`usercart:${userId}`, id.toString());
 
@@ -120,7 +118,6 @@ export const CartProvider: any = ({
       };
 
       setCartItems(updatedItemQuantities);
-
       redis.hincrby(`user:${userId}`, id.toString(), 1);
     }
   };
@@ -170,7 +167,7 @@ export const CartProvider: any = ({
 
   const checkout = async () => {
     if (Object.keys(cartItems).length > 0) {
-      triggerEvent("checkout",undefined, cart);
+      triggerEvent("checkout", undefined, cart);
     }
     resetCart();
   };

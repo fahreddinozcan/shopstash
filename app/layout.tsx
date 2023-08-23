@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import CartProvider from "./components/cart/CartContext";
+import CartProvider from "./components/context/CartContext";
 import { GlobalProvider } from "./GlobalProvider";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "./components/Header";

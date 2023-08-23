@@ -15,7 +15,7 @@ import { FaCartShopping } from "react-icons/fa6";
 
 import Link from "next/link";
 import Image from "next/image";
-import CartContext from "./CartContext";
+import CartContext from "../context/CartContext";
 import RateContext from "../context/RateContext";
 import QuantityButton from "./quantity-button";
 
@@ -44,7 +44,6 @@ const mapIdsToObjects = (products: Item[], ids: number[]): Item[] => {
 export default function Cart() {
   const { addItem, removeItem, resetCart, cart, cartItems, checkout } =
     useContext(CartContext);
-  const { resetItemRates } = useContext(RateContext);
   cart.sort((a: Item, b: Item) => {
     return a.id - b.id;
   });
@@ -79,8 +78,6 @@ export default function Cart() {
                         className="gap-3 w-[95%]  border-b border-neutral-300 dark:border-neutral-700 py-4 px-2 grid grid-flow-col grid-cols-min transition-all ease-in-out"
                         key={item.id}
                       >
-                        {/* <div className="relative flex flex-col shrink-0 w-full h-full justify-between px-1 py-4 "> */}
-
                         <div>
                           <Link
                             href={`products/${item.id}`}
@@ -119,15 +116,13 @@ export default function Cart() {
                             quantity={cartItems[item.id]}
                           />
                         </div>
-
-                        {/* </div> */}
                       </li>
                     );
                   })}
                 </ul>
 
                 <div
-                  className="flex flex-col align-center justify-center  gap-6 "
+                  className="flex flex-col align-center justify-center  gap-6 mb-12 "
                   key="reset"
                 >
                   <div className="flex justify-between border-t border-b border-neutral-500 py-4">
@@ -167,14 +162,6 @@ export default function Cart() {
                 </div>
               </div>
             )}
-
-            <button
-              onClick={() => {
-                resetItemRates();
-              }}
-            >
-              RESET RATES
-            </button>
           </div>
         </SheetContent>
       </Sheet>

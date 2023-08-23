@@ -16,9 +16,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { FaCartShopping } from "react-icons/fa6";
-import CartContext from "../cart/CartContext";
-import RateContext from "../context/RateContext";
-import UserStateContext from "../context/UserStateContext";
+import CartContext from "./context/CartContext";
+import RateContext from "./context/RateContext";
+import UserStateContext from "./context/UserStateContext";
 
 import { useState } from "react";
 import { User } from "lucide-react";
@@ -39,28 +39,24 @@ export default function CardComponent(props: { item: cardProps }) {
   const { item } = props;
   const { id, title, image, company } = item;
 
-  const [value, setValue] = useState(2);
-
   const { addItem, removeItem, cartItems } = useContext(CartContext);
   const { itemRates, rateItem } = useContext(RateContext);
-
+  
   return (
     <>
-      <Card className="hover:shadow-lg transition duration-200">
+      <Card className="hover:shadow-lg transition duration-200 grid grid-rows-[3fr_1fr] align-end">
         <Link href={`/products/${id}`}>
           <CardHeader>
             <CardTitle>{title}</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* <p>Card Content</p> */}
-
             <Image src={image} alt={title} width={300} height={300}></Image>
-
-            <CardDescription>{company}</CardDescription>
+            
           </CardContent>
         </Link>
         <CardFooter>
-          <div className="grid grid-rows-2">
+          <div className="grid grid-rows-3 items-begin">
+          <CardDescription>{company}</CardDescription>
             <Rating
               name="simple-controlled"
               value={parseInt(itemRates[id - 1])}

@@ -41,19 +41,6 @@ export async function POST(request: Request) {
     itemsData = redis.smembers(`${mail_type}:${user.userID}`);
   }
 
-  //   await fetch("https://api.resend.com/emails", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${RESEND_API_KEY}`,
-  //     },
-  //     body: JSON.stringify({
-  //       from: "ShopStash <onboarding@resend.dev>",
-  //       to: [user.emailAddress],
-  //       subject: mailSubject[mail_type as mailType],
-  //       react: EmailTemplate({ user, mail_type }),
-  //     }),
-  //   });
   const data = await resend.emails.send({
     from: "ShopStash <onboarding@resend.dev>",
     to: [user.emailAddress],

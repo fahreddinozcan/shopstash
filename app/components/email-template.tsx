@@ -48,13 +48,6 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           <tbody>
             {itemsData.map((item, index) => (
               <tr key={index}>
-                <td>
-                  <Img
-                    src={`../public/images/1.png`}
-                    alt={item.title}
-                    width="100"
-                  />
-                </td>
                 <td>{item.title}</td>
                 <td>${item.price}</td>
               </tr>
@@ -69,28 +62,59 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
       </div>
     );
   } else if (mail_type == "item-interest") {
-    // return (
-    //   <div>
-    //     <h2>Hey, {user.firstName}!</h2>
-    //     <p>Check out these items, you may be interested in them:</p>
-    //     {itemsData?.map((itemID) => {
-    //       const item = items.find((item) => {
-    //         console.log(item.id, itemID);
-    //         return item.id == parseInt(itemID);
-    //       });
-    //       if (!item) {
-    //         return (
-    //           <div key="item">
-    //             <p>ITEMS</p>
-    //             {itemsData}
-    //           </div>
-    //         );
-    //       }
-    //       return <p key={item.id}>{item.title}</p>;
-    //     })}
-    //   </div>
-    // );
+    return (
+      <div>
+        <h2>Hey, {user.firstName}!</h2>
+        <p>Check out these items, you may be interested in them:</p>
+        <div className="items-list">
+          {itemsData?.map((item) => {
+            if (!item) return null;
+
+            return (
+              <div key={item.id} className="item">
+                <p>{item.title}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   } else if (mail_type == "items-to-rate") {
+    return (
+      <div>
+        <h2>Hey, {user.firstName}!</h2>
+        <p>
+          We would love to hear your thoughts on the items you have recently
+          interacted with. Please rate them:
+        </p>
+        <div className="items-list">
+          {itemsData?.map((item) => {
+            if (!item) return null;
+
+            return (
+              <div key={item.id} className="item">
+                <p>{item.title}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   } else if (mail_type == "forgot-items-in-cart") {
+    return (
+      <div>
+        <h2>Hey, {user.firstName}!</h2>
+        <p>
+          It looks like you have logged out with some items still in your cart.
+          Do not miss out on them!
+        </p>
+        <a href="https://shopshash.vercel.app">View My Cart</a>
+        <p>
+          If you have any questions or need assistance, please feel free to
+          reach out to us.
+        </p>
+        <p>Happy shopping!</p>
+      </div>
+    );
   }
 };

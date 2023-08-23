@@ -1,4 +1,4 @@
-import { CartProvider } from "./components/cart/CartContext";
+import { CartProvider } from "./components/context/CartContext";
 import { RateProvider } from "./components/context/RateContext";
 import { UserStateProvider } from "./components/context/UserStateContext";
 import { auth, currentUser } from "@clerk/nextjs";

@@ -1,7 +1,7 @@
 "use client";
 
 import { FaCartShopping } from "react-icons/fa6";
-import UserStateContext from "./context/UserStateContext";
+import UserStateContext from "../context/UserStateContext";
 import { useContext } from "react";
 
 type cartContent = {

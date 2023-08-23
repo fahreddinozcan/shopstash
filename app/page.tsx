@@ -1,18 +1,10 @@
-import { UserButton, auth, currentUser } from "@clerk/nextjs";
-
-import CardComponent from "./components/ui/card";
+import { currentUser } from "@clerk/nextjs";
+import CardComponent from "./components/card";
 import Cart from "./components/cart/cart";
-import { useContext } from "react";
 import { items } from "@/public/items";
-import CartContext from "./components/cart/CartContext";
 
 export default async function Home() {
-    const { userId } = auth();
-    const cart = [1, 2, 3];
     const user = await currentUser();
-
-    // const { cartItems } = useCart();
-    // const  {addItem, removeItem, deleteItem} = useContext(CartContext)
 
     if (!user)
         return (
@@ -22,11 +14,7 @@ export default async function Home() {
                 </h1>
             </div>
         );
-    // return (
-    //     <>
-    //         <App />
-    //     </>
-    // );
+
     return (
         <div className="">
             <div className="flex items-center justify-between mb-5 mt-5 align-center">

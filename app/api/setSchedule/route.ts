@@ -32,7 +32,6 @@ export async function POST(request: Request) {
   });
 
   redis.set(`${mail_type}:${user.ID}`, res);
-  console.log(res);
 
   return NextResponse.json("OK");
 }

@@ -70,7 +70,7 @@ export const items = [
     {
         id: 7,
         title: "Artistic Canvas Painting",
-        image: "/images/m1air.png",
+        image: "/images/7.png",
         description:
             "Add a touch of art to your home with this beautiful canvas painting.",
         company: "Artistic Expressions",
@@ -82,7 +82,7 @@ export const items = [
     {
         id: 8,
         title: "Gourmet Coffee Beans",
-        image: "/images/m1air.png",
+        image: "/images/8.png",
         description:
             "Indulge in the rich flavors of these premium coffee beans.",
         company: "Bean Master",
@@ -94,7 +94,7 @@ export const items = [
     {
         id: 9,
         title: "Classic Leather Wallet",
-        image: "/images/m1air.png",
+        image: "/images/9.png",
         description:
             "Keep your cards and cash organized with this timeless leather wallet.",
         company: "LeatherCraft",
@@ -106,7 +106,7 @@ export const items = [
     {
         id: 10,
         title: "Minimalist Wristwatch",
-        image: "/images/m1air.png",
+        image: "/images/10.png",
         description:
             "A sleek and minimalistic wristwatch that complements any outfit.",
         company: "Timeless Watches",
@@ -118,7 +118,7 @@ export const items = [
     {
         id: 11,
         title: "Deluxe Chef's Knife",
-        image: "/images/m1air.png",
+        image: "/images/11.png",
         description:
             "Upgrade your kitchen with this high-quality chef's knife.",
         company: "Culinary Masterpieces",
@@ -130,46 +130,11 @@ export const items = [
     {
         id: 12,
         title: "Stylish Sunglasses",
-        image: "/images/m1air.png",
+        image: "/images/12.png",
         description:
             "Protect your eyes in style with these fashionable sunglasses.",
         company: "Sunshine Shades",
         price: 59.99,
-        rateValue: 0,
-        rateCount: 0,
-        quantity: 0,
-    },
-    {
-        id: 13,
-        title: "Chic Leather Boots",
-        image: "/images/m1air.png",
-        description: "Step out in confidence with these trendy leather boots.",
-        company: "Urban Chic",
-        price: 129.95,
-        rateValue: 0,
-        rateCount: 0,
-        quantity: 0,
-    },
-    {
-        id: 14,
-        title: "Aromatherapy Diffuser",
-        image: "/images/m1air.png",
-        description:
-            "Create a soothing ambiance with this aromatherapy diffuser.",
-        company: "Relaxation Station",
-        price: 34.5,
-        rateValue: 0,
-        rateCount: 0,
-        quantity: 0,
-    },
-    {
-        id: 15,
-        title: "Portable Bluetooth Speaker",
-        image: "/images/m1air.png",
-        description:
-            "Enjoy your favorite music on the go with this compact speaker.",
-        company: "SoundWave",
-        price: 59.95,
         rateValue: 0,
         rateCount: 0,
         quantity: 0,
