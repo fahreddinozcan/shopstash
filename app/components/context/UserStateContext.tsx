@@ -133,6 +133,7 @@ export const UserStateProvider: any = ({
             method: "DELETE",
             body: JSON.stringify({
               mail_type: "item-interest",
+              delay: "10s",
               user: {
                 userID: userId,
                 firstName: user.firstName,

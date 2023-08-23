@@ -42,19 +42,22 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             <tr>
               <th>Item</th>
               <th>Price</th>
-              <th>Image</th>
             </tr>
           </thead>
           <tbody>
             {itemsData.map((item, index) => (
               <tr key={index}>
-                <td>{item.title}</td>
+                <td>
+                  <a
+                    href={`https://shopstash.vercel.app/products/${item.id}`}
+                  ></a>
+                </td>
                 <td>${item.price}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <Img src={`../public/images/1.png`} alt={"selam"} width="100" />
+
         <p>
           Thank you for choosing us! If you have any questions or concerns,
           please contact our support team.
