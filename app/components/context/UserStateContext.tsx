@@ -120,7 +120,7 @@ export const UserStateProvider: any = ({
           toast({
             title: "Edited Schedule",
             description: `Item with ID ${id} is added to cart!. Here's the items that user is interested in but haven't added to cart: ${newInterestedIn.join(
-              ""
+              ", "
             )}`,
           });
         } else {
